@@ -14,7 +14,7 @@ android {
     defaultConfig {
         applicationId = "edu.lemoyne.campusapp"
         minSdk = 35
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
