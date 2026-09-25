@@ -4,13 +4,21 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import edu.lemoyne.campusapp.ui.theme.CampusAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,29 +29,50 @@ class MainActivity : ComponentActivity() {
         setContent {
             CampusAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Dzemal",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+                    HomeScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
     }
 }
 
-// --- Class 5: Step 6: my own greeting ---
+// --- Class 6: Step1: my own screen ---
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
+fun HomeScreen(modifier: Modifier = Modifier) {
+    // --- Class 6: Step 3: a column, so things stack ---
+    Column(
         modifier = modifier
-    )
+            .fillMaxWidth()
+            .padding(24.dp)
+    ) {
+        // --- Class 6: Step 4: real styling ---
+        Text(
+            text = "Hiking Log",
+            fontSize = 32.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = "Trails I have walked this year",
+            fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(text = "Green Lakes State Park", fontSize = 18.sp)
+        Text(text = "Clark Reservation", fontSize = 18.sp)
+        Text(text = "Highland Forest", fontSize = 18.sp)
+    }
 }
 
-@Preview(showBackground = true)
+// --- Class 6: Step2: preview ---
+@Preview
 @Composable
-fun GreetingPreview() {
+fun HomeScreenPreview() {
     CampusAppTheme {
-        Greeting("Android")
+        HomeScreen()
     }
 }
