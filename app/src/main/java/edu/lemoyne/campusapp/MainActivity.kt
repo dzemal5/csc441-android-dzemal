@@ -72,7 +72,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .padding(24.dp)
     ) {
-        CounterDemo()
+//        CounterDemo()
         // --- Class 6: Step 4: real styling ---
         Text(
             text = "Hiking Log",
