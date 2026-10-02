@@ -98,12 +98,26 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.fillMaxWidth()
         )
 
+        Text(
+            text = "${newTrail.length} / 40",
+            fontSize = 12.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
         // Class 7: Step 4: the button changes the state ---
         Button(onClick = {
             trails.add(newTrail)
             newTrail = ""
         }) {
             Text("Add trail")
+        }
+
+        Button(onClick = {
+            if (trails.isNotEmpty()) {
+                trails.removeAt(trails.lastIndex)
+            }
+        }) {
+            Text("Remove trail")
         }
 
         Spacer(modifier = Modifier.height(8.dp))
