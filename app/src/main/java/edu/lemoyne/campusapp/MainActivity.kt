@@ -167,6 +167,8 @@ fun validateTrailName(input: String, existingTrails: List<String>): String? {
     return when {
         name.isEmpty() -> "Enter a trail name"
         name.length > MAX_NAME_LENGTH -> "Keep it to $MAX_NAME_LENGTH characters or fewer"
+        name.length < 3 -> "Too short - at least three characters"
+        name.all { it.isDigit()} -> "A name cant be only numbers"
         existingTrails.any { it.equals( name, ignoreCase = true ) } -> "$name is already on the list"
         else -> null
     }
