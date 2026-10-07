@@ -64,7 +64,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     }
 
     // --- Class 7: Step 3: what's typed lives in state ---
-    var newTrail by remember { mutableStateOf("")}
+    var newTrail by remember { mutableStateOf("") }
+    // --- Class 8: Step 2: the error message lives in state too ---
+    var error by remember { mutableStateOf<String?>(null) }
 
     // --- Class 6: Step 3: a column, so things stack ---
     Column(
@@ -93,22 +95,45 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         // --- Class 7: Step 3: the text field ---
         OutlinedTextField(
             value = newTrail,
-            onValueChange = { newTrail = it },
+            // --- Class 8: Step 3: the field itself pushes back ---
+            onValueChange = {
+                newTrail = it.take(MAX_NAME_LENGTH)
+                error = null
+            },
             label = { Text("Trail name") },
+            singleLine = true,
+            isError = error != null,
             modifier = Modifier.fillMaxWidth()
         )
 
+        error?.let { message ->
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.error,
+                fontSize = 14.sp
+            )
+        }
+
         Text(
-            text = "${newTrail.length} / 40",
+            text = "${newTrail.length} / 30",
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
         // Class 7: Step 4: the button changes the state ---
         Button(onClick = {
-            trails.add(newTrail)
-            newTrail = ""
-        }) {
+            // --- Class 8: Step 3: check before you add ---
+            val problem = validateTrailName(input = newTrail, existingTrails = trails)
+            if (problem == null) {
+                trails.add(newTrail)
+                newTrail = ""
+            } else {
+                error = problem
+            }
+        },
+            // --- Class 8: Step 4: the sign on the door, not the lock ---
+            enabled = newTrail.isNotBlank()
+            ) {
             Text("Add trail")
         }
 
@@ -131,6 +156,19 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         for (trail in trails) {
             Text(text = trail, fontSize = 18.sp)
         }
+    }
+}
+
+const val MAX_NAME_LENGTH = 30
+
+// --- Class 8: Step 1:one rule book for trail names ---
+fun validateTrailName(input: String, existingTrails: List<String>): String? {
+    val name = input.trim()
+    return when {
+        name.isEmpty() -> "Enter a trail name"
+        name.length > MAX_NAME_LENGTH -> "Keep it to $MAX_NAME_LENGTH characters or fewer"
+        existingTrails.any { it.equals( name, ignoreCase = true ) } -> "$name is already on the list"
+        else -> null
     }
 }
 
