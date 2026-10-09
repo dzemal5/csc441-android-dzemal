@@ -42,7 +42,7 @@ fun CampusAppScreen(
     modifier: Modifier = Modifier,
 ) {
     // --- Class 7: Step 2: the list lives in state
-    val trails = remember {
+    val trails = rememberSaveable {
         mutableStateListOf("Green Lakes State Park", "Clark Reservation", "Highland Forest")
     }
     // --- Class 9: Step 4: which screen is showing is just state ---
@@ -52,11 +52,14 @@ fun CampusAppScreen(
         "home" -> HomeScreen(
             trails = trails,
             onAddTrail = { trails.add(it) },
-            onSeeAll = { currentScreen = "list" })
+            onSeeAll = { currentScreen = "list" },
+            onAbout = { currentScreen = "about" }
+        )
 
         "list" -> ListScreen(
             trails = trails, onBack = { currentScreen = "home" }, modifier = modifier
         )
+        "about" -> AboutScreen(onBack = { currentScreen = "home" }, modifier = modifier)
 
     }
 }
@@ -67,6 +70,7 @@ fun HomeScreen(
     trails: MutableList<String>,
     onAddTrail: (String) -> Unit,
     onSeeAll: () -> Unit,
+    onAbout: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // --- Class 7: Step 3: what's typed lives in state ---
@@ -154,6 +158,10 @@ fun HomeScreen(
         Button(onClick = onSeeAll) {
             Text(text = "See all trails")
         }
+
+        Button(onClick = onAbout) {
+            Text(text = "About")
+        }
     }
 }
 
@@ -186,6 +194,32 @@ fun ListScreen(
     }
 }
 
+// --- Lab 9 · Task 2: a third screen ---
+@Composable
+fun AboutScreen(
+    onBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    BackHandler { onBack() }
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(24.dp)
+    ) {
+        TextButton(onClick = onBack) {
+            Text("Back")
+        }
+        Text(
+            text = "About",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(text = "Hiking Log keeps track of the trails I've walked.")
+        Text(text = "Built for CSC 441 by YOUR NAME.")
+    }
+}
+
 const val MAX_NAME_LENGTH = 30
 
 // --- Class 8: Step 1:one rule book for trail names ---
@@ -208,7 +242,7 @@ fun HomeScreenPreview() {
     CampusAppTheme {
         HomeScreen(trails = remember {
             mutableStateListOf("Green Lakes State Park", "Clark Reservation", "Highland Forest")
-        }, onAddTrail = {}, onSeeAll = {})
+        }, onAddTrail = {}, onSeeAll = {}, onAbout = {})
     }
 }
 
@@ -223,5 +257,13 @@ fun ListScreenPreview() {
             },
             onBack = {}
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AboutScreenPreview() {
+    CampusAppTheme {
+        AboutScreen(onBack = {})
     }
 }
