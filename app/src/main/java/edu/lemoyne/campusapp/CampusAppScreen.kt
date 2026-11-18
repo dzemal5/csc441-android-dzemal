@@ -60,7 +60,7 @@ fun CounterDemo() {
 
 // --- Class 9 · Step 2: one owner for the data ---
 @Composable
-fun CampusAppScreen(modifier: Modifier = Modifier) {
+fun CampusAppScreen(showcaseState: ShowcaseUiState, modifier: Modifier = Modifier) {
     // --- Class 7 · Step 2: the list lives in state ---
     val trails = remember {
         mutableStateListOf("Green Lakes State Park", "Clark Reservation", "Highland Forest")
@@ -74,6 +74,7 @@ fun CampusAppScreen(modifier: Modifier = Modifier) {
             trails = trails,
             onAddTrail = { trails.add(it) },
             onSeeAll = { currentScreen = "list" },
+            onSupabase = { currentScreen = "supaabse" },
             modifier = modifier
         )
         "list" -> ListScreen(
@@ -83,6 +84,13 @@ fun CampusAppScreen(modifier: Modifier = Modifier) {
             onRemove = { trails.remove(it) },
             modifier = modifier
         )
+
+        "supaabse" -> InterestsScreen(
+            state = showcaseState,
+            onBack = { currentScreen = "home" },
+            modifier = modifier
+        )
+
     }
 }
 
@@ -92,6 +100,7 @@ fun HomeScreen(
     trails: List<String>,
     onAddTrail: (String) -> Unit,
     onSeeAll: () -> Unit,
+    onSupabase: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // --- Class 7 · Step 3: what's typed lives in state ---
@@ -179,6 +188,10 @@ fun HomeScreen(
         // --- Class 9 · Step 5: a way to the second screen ---
         Button(onClick = onSeeAll) {
             Text("See all trails")
+        }
+
+        Button(onClick = onSupabase) {
+            Text("Supabase")
         }
     }
 }
@@ -271,7 +284,8 @@ fun HomeScreenPreview() {
         HomeScreen(
             trails = listOf("Green Lakes State Park", "Clark Reservation"),
             onAddTrail = {},
-            onSeeAll = {}
+            onSeeAll = {},
+            onSupabase = {}
         )
     }
 }
