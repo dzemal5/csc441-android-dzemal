@@ -60,7 +60,10 @@ fun CounterDemo() {
 
 // --- Class 9 · Step 2: one owner for the data ---
 @Composable
-fun CampusAppScreen(showcaseState: ShowcaseUiState, modifier: Modifier = Modifier) {
+fun CampusAppScreen(
+    showcaseState: ShowcaseUiState,
+    onRefreshShowcase: () -> Unit,
+    modifier: Modifier = Modifier) {
     // --- Class 7 · Step 2: the list lives in state ---
     val trails = remember {
         mutableStateListOf("Green Lakes State Park", "Clark Reservation", "Highland Forest")
@@ -74,7 +77,7 @@ fun CampusAppScreen(showcaseState: ShowcaseUiState, modifier: Modifier = Modifie
             trails = trails,
             onAddTrail = { trails.add(it) },
             onSeeAll = { currentScreen = "list" },
-            onSupabase = { currentScreen = "supaabse" },
+            onInterestsClick = { currentScreen = "interests" },
             modifier = modifier
         )
         "list" -> ListScreen(
@@ -85,8 +88,9 @@ fun CampusAppScreen(showcaseState: ShowcaseUiState, modifier: Modifier = Modifie
             modifier = modifier
         )
 
-        "supaabse" -> InterestsScreen(
+        "interests" -> InterestsScreen(
             state = showcaseState,
+            onRefresh = { onRefreshShowcase() },
             onBack = { currentScreen = "home" },
             modifier = modifier
         )
@@ -100,7 +104,7 @@ fun HomeScreen(
     trails: List<String>,
     onAddTrail: (String) -> Unit,
     onSeeAll: () -> Unit,
-    onSupabase: () -> Unit,
+    onInterestsClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     // --- Class 7 · Step 3: what's typed lives in state ---
@@ -190,8 +194,8 @@ fun HomeScreen(
             Text("See all trails")
         }
 
-        Button(onClick = onSupabase) {
-            Text("Supabase")
+        Button(onClick = onInterestsClick) {
+            Text("My Interests")
         }
     }
 }
@@ -285,7 +289,7 @@ fun HomeScreenPreview() {
             trails = listOf("Green Lakes State Park", "Clark Reservation"),
             onAddTrail = {},
             onSeeAll = {},
-            onSupabase = {}
+            onInterestsClick = {}
         )
     }
 }

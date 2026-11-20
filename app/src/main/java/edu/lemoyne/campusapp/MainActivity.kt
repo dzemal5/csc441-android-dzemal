@@ -47,7 +47,10 @@ class MainActivity : ComponentActivity() {
             CampusAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     //Step 6
-                    CampusAppScreen(showcaseState = showcaseState, modifier = Modifier.padding(innerPadding))
+                    CampusAppScreen(
+                        showcaseState = showcaseState,
+                        onRefreshShowcase = { showcaseViewModel.refresh() },
+                        modifier = Modifier.padding(innerPadding))
                 }
             }
         }
