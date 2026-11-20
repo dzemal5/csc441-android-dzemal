@@ -49,7 +49,7 @@ class MainActivity : ComponentActivity() {
                     //Step 6
                     CampusAppScreen(
                         showcaseState = showcaseState,
-                        onRefreshShowcase = { showcaseViewModel.refresh() },
+                        onRefreshShowcase = showcaseViewModel::refresh,
                         modifier = Modifier.padding(innerPadding))
                 }
             }
