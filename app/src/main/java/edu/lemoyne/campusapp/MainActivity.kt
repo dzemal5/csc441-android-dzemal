@@ -28,29 +28,43 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import edu.lemoyne.campusapp.ui.theme.CampusAppTheme
 
 class MainActivity : ComponentActivity() {
 
     //Step 6
     val showcaseViewModel: ShowcaseViewModel by viewModels()
+    val loginViewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //Step 6
-        showcaseViewModel.refresh()
+//        showcaseViewModel.refresh()
         enableEdgeToEdge()
 
         setContent {
             //Step 6
             val showcaseState by showcaseViewModel.uiState.collectAsState()
+            val loginState by loginViewModel.state.collectAsStateWithLifecycle()
+
             CampusAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     //Step 6
                     CampusAppScreen(
                         showcaseState = showcaseState,
+                        loginState = loginState,
                         onRefreshShowcase = showcaseViewModel::refresh,
-                        modifier = Modifier.padding(innerPadding))
+                        onLogin = { email, password, navigate ->
+                            loginViewModel.login(email, password) { token ->
+                                showcaseViewModel.setAccessToken(token)
+                                showcaseViewModel.refresh()
+                                navigate()
+                            }
+                        },
+                        modifier = Modifier.padding(innerPadding)
+                    )
+
                 }
             }
         }
