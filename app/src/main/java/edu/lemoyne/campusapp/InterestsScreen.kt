@@ -21,9 +21,9 @@ fun InterestsScreen(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LaunchedEffect(Unit) {
-        onRefresh()
-    }
+//    LaunchedEffect(Unit) {
+//        onRefresh()
+//    }
     BackHandler { onBack() }
     Column(modifier = modifier
         .fillMaxSize()
