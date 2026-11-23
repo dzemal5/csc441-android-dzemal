@@ -62,7 +62,9 @@ fun CounterDemo() {
 @Composable
 fun CampusAppScreen(
     showcaseState: ShowcaseUiState,
+    loginState: LoginUiState,
     onRefreshShowcase: () -> Unit,
+    onLogin: (String, String, () -> Unit) -> Unit,
     modifier: Modifier = Modifier) {
     // --- Class 7 · Step 2: the list lives in state ---
     val trails = remember {
@@ -77,7 +79,7 @@ fun CampusAppScreen(
             trails = trails,
             onAddTrail = { trails.add(it) },
             onSeeAll = { currentScreen = "list" },
-            onInterestsClick = { currentScreen = "interests" },
+            onInterestsClick = { currentScreen = "login" },
             modifier = modifier
         )
         "list" -> ListScreen(
@@ -88,9 +90,17 @@ fun CampusAppScreen(
             modifier = modifier
         )
 
+        "login" -> LoginScreen(
+            state = loginState,
+            onLogin = { email, password ->
+                onLogin(email, password) { currentScreen = "interests" }
+            },
+            modifier = modifier
+        )
+
         "interests" -> InterestsScreen(
             state = showcaseState,
-            onRefresh = { onRefreshShowcase() },
+            onRefresh = onRefreshShowcase,
             onBack = { currentScreen = "home" },
             modifier = modifier
         )
